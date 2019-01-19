@@ -1,0 +1,193 @@
+<html>
+    <head>
+            <meta charset="utf-8">
+            <link rel="stylesheet" href="style.css"/>
+            <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+            <script src="jquery.querystring.js"></script>
+            <script src="settings.js"></script>
+            <script src="articles.js"></script>
+            <script src="azure-storage.queue.min.js"></script>
+            <title>Pharmacie</title>
+    </head>
+    <script>
+            var queueUri = 'https://fwotherappsa6a0.queue.core.windows.net';
+            var queueName = 'crf9231';
+            var queueService = AzureStorage.Queue.createQueueServiceWithSas(queueUri, settings.azurestoragetoken);
+            var encoder = new AzureStorage.Queue.QueueMessageEncoder.TextBase64QueueMessageEncoder();
+    </script>
+    <body>
+        <div class="cart">
+            <div class="table" >
+                <div class="layout-inline row th">
+                    <div class="col col-pro">Articles</div>
+                </div>
+                <div id="articles">
+                </div>
+            </div>
+            <p>
+                <input id="email" placeholder="Mon email" oninput="saveEmail();"/><br />
+                <textarea id="comment" placeholder="Commentaire (optionnel)" oninput="saveComment();"></textarea>
+            </p>
+        </p>
+        <a href="#" onclick="delayedSend()" class="btn btn-update" id="send">Envoyer</a>
+        </div>
+    </body>
+    <script>
+
+            var undodeletions = [];
+            var sendinprogress = false;
+
+            var articles = JSON.parse(localStorage.getItem('articles')) || [];
+
+            var query = $.querystring(location.search);
+            if(query.k !== undefined){
+
+                if(allarticles[query.k] !== undefined){
+
+                    var articleexists = false;
+                    $.each(articles, function (i, article){
+                        if(article.barcode === query.k.toString()){
+                            article.quantity++;
+                            articleexists = true;
+                        }
+                    });
+
+                    if(articleexists === false){
+                        articles.push({
+                            barcode : query.k.toString(),
+                            display : allarticles[query.k],
+                            quantity : 1
+                        });
+                    }
+
+                    localStorage.setItem('articles', JSON.stringify(articles));
+                } else {
+                    alert('code bar inconnu');
+                }
+            }
+            
+            
+            function drawTable(){
+                var table = $('#articles');
+                table.empty();
+                $.each(articles, function (i,article){
+                    var row = $('<div>').addClass('layout-inline row');
+
+                    $('<div>').addClass('col col-pro layout-inline').html('<p>' + article.display + '</p>').appendTo(row);
+
+                    if(article.quantity == 0){
+                        $('<div>').addClass('col col-qty layout-inline').html('<a href="#" class="btn btn-cancel" onclick="undo(\'' + article.barcode + '\');">Annuler</a>').appendTo(row);
+                    } else {                    
+                        $('<div>').addClass('col col-qty layout-inline').html(
+                            '<a href="#" onclick="changeQuantity(\'' + article.barcode + '\',-1)" class="qty qty-minus">-</a>' + 
+                            '<input type="numeric" value="' + article.quantity + '" />' + 
+                            '<a href="#" onclick="changeQuantity(\'' + article.barcode + '\',1)" class="qty qty-plus">+</a>').appendTo(row);
+                    }
+                    
+                    table.append(row);
+                });
+            }
+            drawTable();
+
+            initializeForm();
+
+            function initializeForm(){
+                $('#email').val(localStorage.getItem('email'));
+                $('#comment').val(localStorage.getItem('comment'));
+            }
+
+            function saveEmail(){
+                localStorage.setItem('email', $('#email').val());
+            }
+
+            function saveComment(){
+                localStorage.setItem('comment', $('#comment').val());
+            }
+
+            function changeQuantity(barcode,amount){
+                $.each(articles, function (i, article){
+                    if(article.barcode === barcode){
+                        article.quantity +=amount;
+                        if(article.quantity == 0){
+                            undodeletions.push(barcode);
+                            setTimeout(function () { 
+                                delayedDeletion(barcode);
+                            }, 2000);
+                        }
+                    }
+                });
+                localStorage.setItem('articles', JSON.stringify(articles));
+                drawTable();
+            }
+
+            function undo(barcode){
+                undodeletions.splice(undodeletions.indexOf(barcode),1);
+
+                $.each(articles, function (i, article){
+                    if(article.barcode === barcode){
+                        article.quantity = 1;
+                    }
+                });
+
+                localStorage.setItem('articles', JSON.stringify(articles));
+                drawTable();
+            }
+
+            function delayedDeletion(barcode){
+
+                // we shouldn't even loop if undodeletions is empty, there is nothing to undo.
+                if(undodeletions.length == 0){
+                    return;
+                }
+
+                $.each(articles, function (i, article){
+                    if(article.barcode === barcode && undodeletions.includes(barcode)){
+                        articles.splice(i,1);
+                        undodeletions.splice(undodeletions.indexOf(barcode),1);
+                        return false;
+                    }
+                });
+                localStorage.setItem('articles', JSON.stringify(articles));
+                drawTable();
+            }
+
+            function delayedSend(){
+                if($('#send').hasClass('btn-cancel')){
+                    // we just cancelled the send
+                    sendinprogress = false;
+                    $('#send').toggleClass('btn-cancel').html("Envoyer");
+                } else {
+                    sendinprogress = true;
+                    $('#send').toggleClass('btn-cancel').html("Annuler");
+                    setTimeout(function () { 
+                        send();
+                    }, 4000);
+                }
+            }
+
+            function send(){
+                if(sendinprogress === false){
+                    return;
+                }
+
+                var message = {
+                    email : $('#email').val(),
+                    comment : $('#comment').val(),
+                    articles : articles
+                };
+                queueService.createMessage(queueName, encoder.encode(JSON.stringify(message)), function (error, results, response) {
+                    if (error) {
+                        // Create message error
+                        console.log(error);
+                    } else {
+                        // Create message successfully
+                        console.log(results);
+                        console.log(response);
+                    }
+                });
+
+                $('#send').toggle();
+            }
+
+    </script>
+</html>
