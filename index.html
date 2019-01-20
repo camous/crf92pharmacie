@@ -45,7 +45,6 @@
                     var articleexists = false;
                     $.each(articles, function (i, article){
                         if(article.barcode === query.k.toString()){
-                            article.quantity++;
                             articleexists = true;
                         }
                     });
@@ -79,9 +78,7 @@
                         $('<div>').addClass('col col-qty layout-inline').html('<a href="#" class="btn btn-cancel" onclick="undo(\'' + article.barcode + '\');">Annuler</a>').appendTo(row);
                     } else {                    
                         $('<div>').addClass('col col-qty layout-inline').html(
-                            '<a href="#" onclick="changeQuantity(\'' + article.barcode + '\',-1)" class="qty qty-minus">-</a>' + 
-                            '<input type="numeric" value="' + article.quantity + '" />' + 
-                            '<a href="#" onclick="changeQuantity(\'' + article.barcode + '\',1)" class="qty qty-plus">+</a>').appendTo(row);
+                            '<a href="#" onclick="changeQuantity(\'' + article.barcode + '\',-1)" class="qty qty-minus"><img src="waste.png" /></a>').appendTo(row);
                     }
                     
                     table.append(row);
