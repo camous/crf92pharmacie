@@ -24,6 +24,9 @@
             </p>
         </p>
         <a href="#" onclick="delayedSend()" class="btn btn-update" id="send">Envoyer</a>
+        <p id="flash">
+            Commande envoyée
+        </p>
         </div>
     </body>
     <script>
@@ -163,16 +166,13 @@
 
                     queueService.createMessage(settings.azurequeuename, encoder.encode(JSON.stringify(message)), function (error, results, response) {
                         if (error) {
-                            // Create message error
-                            console.log(error);
-                        } else {
-                            // Create message successfully
-                            console.log(results);
-                            console.log(response);
+                            $('#flash').html(error.message);
+                            $('#flash').addClass('flasherror');
                         }
                     });
 
                     $('#send').toggle();
+                    $('#flash').toggle();
                 });
             }
 

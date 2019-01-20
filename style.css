@@ -179,7 +179,19 @@ body {
     margin: 0 0 1.5em 0;
   }
 
-  
+  #flash {
+    padding: 0.7em 1em;
+    border-radius: 0.3em;
+    font-size: 2em;
+    color: #fff;
+    background: #37AD1C;
+  }
+
+  .flasherror {
+    font-size: 1em !important;
+    background: #ECA51B !important;
+  }
+
   @media screen and ( max-width: 755px) {
     .container {
       width: 98%;

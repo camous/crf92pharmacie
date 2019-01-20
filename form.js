@@ -1,4 +1,5 @@
 function initializeForm(){
+    $('#flash').toggle();
     $('#email').val(localStorage.getItem('email'));
     $('#comment').val(localStorage.getItem('comment'));
 }
