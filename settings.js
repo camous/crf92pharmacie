@@ -1,5 +1,5 @@
 var settings = {
     azurestoragetoken : '',
-    azurequeueuri = '',
-    azurequeuename = ''
+    azurequeueuri : '',
+    azurequeuename : ''
 };
