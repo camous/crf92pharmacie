@@ -4,6 +4,7 @@
             <link rel="stylesheet" href="style.css"/>
             <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
             <script src="jquery.querystring.js"></script>
+            <script src="form.js"></script>
             <script src="settings.js"></script>
             <script src="articles.js"></script>
             <title>Stock 9231</title>
@@ -32,6 +33,10 @@
 
             var articles = JSON.parse(localStorage.getItem('articles')) || [];
 
+            /*
+                grab code from querystring, if already exists in articles, increment by one
+                otherwise create a new article with quantity 1
+            */
             var query = $.querystring(location.search);
             if(query.k !== undefined){
 
@@ -59,7 +64,9 @@
                 }
             }
             
-            
+            /*
+                redraw the full article table, some optimization could be performed by only redrawing what changed
+            */
             function drawTable(){
                 var table = $('#articles');
                 table.empty();
@@ -79,22 +86,6 @@
                     
                     table.append(row);
                 });
-            }
-            drawTable();
-
-            initializeForm();
-
-            function initializeForm(){
-                $('#email').val(localStorage.getItem('email'));
-                $('#comment').val(localStorage.getItem('comment'));
-            }
-
-            function saveEmail(){
-                localStorage.setItem('email', $('#email').val());
-            }
-
-            function saveComment(){
-                localStorage.setItem('comment', $('#comment').val());
             }
 
             function changeQuantity(barcode,amount){
@@ -197,5 +188,7 @@
                 });
             }
 
+            initializeForm();
+            drawTable();
     </script>
 </html>
