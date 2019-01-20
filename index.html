@@ -103,6 +103,9 @@
                 if(!$('#send').is(':visible')){
                     $('#send').toggle().toggleClass('btn-cancel').html("Envoyer");
                 }
+                if(!$('#flash').is(':visible')){
+                    $('#flash').toggle();
+                }
             }
 
             function undo(barcode){
