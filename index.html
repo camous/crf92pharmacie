@@ -6,7 +6,6 @@
             <script src="jquery.querystring.js"></script>
             <script src="settings.js"></script>
             <script src="articles.js"></script>
-            <script src="azure-storage.queue.min.js"></script>
             <title>Stock 9231</title>
     </head>
     <body>
@@ -112,6 +111,10 @@
                 });
                 localStorage.setItem('articles', JSON.stringify(articles));
                 drawTable();
+
+                if(!$('#send').is(':visible')){
+                    $('#send').toggle().toggleClass('btn-cancel').html("Envoyer");
+                }
             }
 
             function undo(barcode){
@@ -170,21 +173,28 @@
                 };
 
                 // storage service only init if actual send action (90% the page is only for feeding the cart)
-                var queueService = AzureStorage.Queue.createQueueServiceWithSas(settings.azurequeueuri, settings.azurestoragetoken);
-                var encoder = new AzureStorage.Queue.QueueMessageEncoder.TextBase64QueueMessageEncoder();
-
-                queueService.createMessage(settings.azurequeuename, encoder.encode(JSON.stringify(message)), function (error, results, response) {
-                    if (error) {
-                        // Create message error
-                        console.log(error);
-                    } else {
-                        // Create message successfully
-                        console.log(results);
-                        console.log(response);
-                    }
+                $.ajaxSetup({
+                    cache: true
                 });
 
-                $('#send').toggle();
+                $.getScript('azure-storage.queue.min.js', function(){
+
+                    var queueService = AzureStorage.Queue.createQueueServiceWithSas(settings.azurequeueuri, settings.azurestoragetoken);
+                    var encoder = new AzureStorage.Queue.QueueMessageEncoder.TextBase64QueueMessageEncoder();
+
+                    queueService.createMessage(settings.azurequeuename, encoder.encode(JSON.stringify(message)), function (error, results, response) {
+                        if (error) {
+                            // Create message error
+                            console.log(error);
+                        } else {
+                            // Create message successfully
+                            console.log(results);
+                            console.log(response);
+                        }
+                    });
+
+                    $('#send').toggle();
+                });
             }
 
     </script>
