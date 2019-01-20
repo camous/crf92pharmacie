@@ -38,21 +38,16 @@
                 otherwise create a new article with quantity 1
             */
             var query = $.querystring(location.search);
-            if(query.k !== undefined){
+            var barcode = query.k.toString();
+            if(barcode !== undefined){
 
-                if(allarticles[query.k] !== undefined){
+                if(allarticles[barcode] !== undefined){
 
-                    var articleexists = false;
-                    $.each(articles, function (i, article){
-                        if(article.barcode === query.k.toString()){
-                            articleexists = true;
-                        }
-                    });
-
-                    if(articleexists === false){
+                    var article = articles.find(article => article.barcode === barcode);
+                    if(article === undefined){
                         articles.push({
                             barcode : query.k.toString(),
-                            display : allarticles[query.k],
+                            display : allarticles[barcode],
                             quantity : 1
                         });
                     }
@@ -86,17 +81,19 @@
             }
 
             function changeQuantity(barcode,amount){
-                $.each(articles, function (i, article){
-                    if(article.barcode === barcode){
-                        article.quantity +=amount;
-                        if(article.quantity == 0){
+
+                var article = articles.find(article => article.barcode === barcode);
+                if(article !== undefined){
+                    article.quantity +=amount;
+
+                    if(article.quantity == 0){
                             undodeletions.push(barcode);
                             setTimeout(function () { 
                                 delayedDeletion(barcode);
                             }, 2000);
                         }
-                    }
-                });
+                }
+
                 localStorage.setItem('articles', JSON.stringify(articles));
                 drawTable();
 
@@ -107,12 +104,7 @@
 
             function undo(barcode){
                 undodeletions.splice(undodeletions.indexOf(barcode),1);
-
-                $.each(articles, function (i, article){
-                    if(article.barcode === barcode){
-                        article.quantity = 1;
-                    }
-                });
+                articles.find(article => article.barcode === barcode).quantity = 1;
 
                 localStorage.setItem('articles', JSON.stringify(articles));
                 drawTable();
@@ -125,13 +117,12 @@
                     return;
                 }
 
-                $.each(articles, function (i, article){
-                    if(article.barcode === barcode && undodeletions.includes(barcode)){
-                        articles.splice(i,1);
-                        undodeletions.splice(undodeletions.indexOf(barcode),1);
-                        return false;
-                    }
-                });
+                var article = articles.find(article => article.barcode === barcode && undodeletions.includes(barcode));
+                if(article !== undefined){
+                    articles.splice(articles.indexOf(article),1);
+                    undodeletions.splice(undodeletions.indexOf(barcode),1);
+                }
+
                 localStorage.setItem('articles', JSON.stringify(articles));
                 drawTable();
             }
