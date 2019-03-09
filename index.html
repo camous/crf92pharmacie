@@ -2,10 +2,11 @@
     <head>
             <meta charset="utf-8">
             <link rel="stylesheet" href="style.css"/>
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
             <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
             <script
-			  src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"
-			  integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="
+			  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+			  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 			  crossorigin="anonymous"></script>
             <script src="jquery.querystring.js"></script>
             <script src="form.js"></script>
@@ -58,7 +59,7 @@
                 if(allarticles[barcode] !== undefined){
                     var article = articles.find(article => article.barcode === barcode);
                     if(article === undefined){
-                        articles.push({
+                        articles.unshift({
                             barcode : barcode,
                             display : allarticles[barcode],
                             quantity : 1
