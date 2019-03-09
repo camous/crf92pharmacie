@@ -228,7 +228,7 @@
                 },
                 select: function(event, ui) {
                     addArticle(ui.item.value, "manualSearch");
-                    drawTable();
+                    drawTable(highlight=ui.item.value);
                     $('#search').val("");
                     return false;
                     /*
@@ -241,6 +241,6 @@
             });
 
             initializeForm();
-            drawTable(highlight=barcode.toString());
+            drawTable(highlight=barcodeQuery.toString());
     </script>
 </html>
