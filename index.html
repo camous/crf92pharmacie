@@ -171,15 +171,15 @@
                         sendConsole(message);
                         break;
                 }
+                
+                $('#send').toggle();
+                $('#flash').toggle();
             }
             
             // Used for debugging script
             function sendConsole(message) {
                 console.log("Sending message");
-                console.log(JSON.stringify(message));
-                
-                $('#send').toggle();
-                $('#flash').toggle();
+                console.log(message);
             }
             
             function sendAzureQueue(message) {
@@ -195,8 +195,6 @@
                         }
                     });
 
-                    $('#send').toggle();
-                    $('#flash').toggle();
                 });
             }
 
