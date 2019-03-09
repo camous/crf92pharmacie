@@ -41,9 +41,9 @@
                 otherwise create a new article with quantity 1
             */
             var query = $.querystring(location.search);
-            var barcode = query.k.toString();
+            var barcode = query.k;
             if(barcode !== undefined){
-
+                barcode = barcode.toString();
                 if(allarticles[barcode] !== undefined){
 
                     var article = articles.find(article => article.barcode === barcode);
