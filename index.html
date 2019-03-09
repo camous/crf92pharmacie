@@ -161,13 +161,34 @@
                 $.ajaxSetup({
                     cache: true
                 });
-
+                
+                switch (settings.sendMode) {
+                    case "azureQueue":
+                        sendAzureQueue(message);
+                        break;
+                    case "consoleDebug":
+                    default:
+                        sendConsole(message);
+                        break;
+                }
+            }
+            
+            // Used for debugging script
+            function sendConsole(message) {
+                console.log("Sending message");
+                console.log(JSON.stringify(message));
+                
+                $('#send').toggle();
+                $('#flash').toggle();
+            }
+            
+            function sendAzureQueue(message) {
                 $.getScript('azure-storage.queue.min.js', function(){
 
-                    var queueService = AzureStorage.Queue.createQueueServiceWithSas(settings.azurequeueuri, settings.azurestoragetoken);
+                    var queueService = AzureStorage.Queue.createQueueServiceWithSas(settings.azureQueue.azurequeueuri, settings.azureQueue.azurestoragetoken);
                     var encoder = new AzureStorage.Queue.QueueMessageEncoder.TextBase64QueueMessageEncoder();
 
-                    queueService.createMessage(settings.azurequeuename, encoder.encode(JSON.stringify(message)), function (error, results, response) {
+                    queueService.createMessage(settings.azureQueue.azurequeuename, encoder.encode(JSON.stringify(message)), function (error, results, response) {
                         if (error) {
                             $('#flash').html(error.message);
                             $('#flash').addClass('flasherror');
