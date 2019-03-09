@@ -64,12 +64,15 @@
             /*
                 redraw the full article table, some optimization could be performed by only redrawing what changed
             */
-            function drawTable(){
+            function drawTable(highlight=""){
                 var table = $('#articles');
                 table.empty();
                 $.each(articles, function (i,article){
                     var row = $('<div>').addClass('layout-inline row');
 
+                    if(article.barcode === highlight) {
+                        row.addClass('highlight');
+                    }
                     $('<div>').addClass('col col-pro layout-inline').html('<p>' + article.display + '</p>').appendTo(row);
 
                     if(article.quantity == 0){
@@ -199,6 +202,6 @@
             }
 
             initializeForm();
-            drawTable();
+            drawTable(highlight=barcode.toString());
     </script>
 </html>
