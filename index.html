@@ -3,6 +3,10 @@
             <meta charset="utf-8">
             <link rel="stylesheet" href="style.css"/>
             <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+            <script
+			  src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+			  integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="
+			  crossorigin="anonymous"></script>
             <script src="jquery.querystring.js"></script>
             <script src="form.js"></script>
             <script src="settings.js"></script>
@@ -11,6 +15,9 @@
     </head>
     <body>
         <div class="cart">
+            <p>
+                <input id="search" type="text" autocomplete="false">
+            </p>
             <div class="table" >
                 <div class="layout-inline row th">
                     <div class="col col-pro">Articles</div>
@@ -43,13 +50,16 @@
             var query = $.querystring(location.search);
             var barcode = query.k;
             if(barcode !== undefined){
+                addArticle(barcode)
+            }
+            
+            function addArticle(barcode) {
                 barcode = barcode.toString();
                 if(allarticles[barcode] !== undefined){
-
                     var article = articles.find(article => article.barcode === barcode);
                     if(article === undefined){
                         articles.push({
-                            barcode : query.k.toString(),
+                            barcode : barcode,
                             display : allarticles[barcode],
                             quantity : 1
                         });
@@ -197,6 +207,33 @@
 
                 });
             }
+            
+            // Autocomplete search field
+            $( "#search" ).autocomplete({
+                minLength: 2,
+                source: $.map(allarticles, function (value, key) {
+                        return {
+                            label: value,
+                            value: key
+                        }
+                    }),
+                focus: function(event, ui) {
+                    $('#search').val(ui.item.label);
+                    return false;
+                },
+                select: function(event, ui) {
+                    addArticle(ui.item.value);
+                    drawTable();
+                    $('#search').val("");
+                    return false;
+                    /*
+                    $('#search').val(ui.item.label);
+                    $('#link_origin_id').val(ui.item.value);
+                    return false;
+                    */
+                }
+                
+            });
 
             initializeForm();
             drawTable();
