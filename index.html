@@ -49,12 +49,12 @@
                 otherwise create a new article with quantity 1
             */
             var query = $.querystring(location.search);
-            var barcode = query.k;
-            if(barcode !== undefined){
-                addArticle(barcode)
+            var barcodeQuery = query.k;
+            if(barcodeQuery !== undefined){
+                addArticle(barcodeQuery, "urlParam")
             }
             
-            function addArticle(barcode) {
+            function addArticle(barcode, method) {
                 barcode = barcode.toString();
                 if(allarticles[barcode] !== undefined){
                     var article = articles.find(article => article.barcode === barcode);
@@ -62,7 +62,8 @@
                         articles.unshift({
                             barcode : barcode,
                             display : allarticles[barcode],
-                            quantity : 1
+                            quantity : 1,
+                            addMethod: method
                         });
                     }
 
@@ -223,7 +224,7 @@
                     return false;
                 },
                 select: function(event, ui) {
-                    addArticle(ui.item.value);
+                    addArticle(ui.item.value, "manualSearch");
                     drawTable();
                     $('#search').val("");
                     return false;
