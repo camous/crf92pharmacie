@@ -1,5 +1,8 @@
 var settings = {
-    azurestoragetoken : '',
-    azurequeueuri : '',
-    azurequeuename : ''
+    sendMode : "consoleDebug",
+    azureQueue: {
+        azurestoragetoken : '',
+        azurequeueuri : '',
+        azurequeuename : ''
+    }
 };
