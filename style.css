@@ -4,7 +4,7 @@ html {
   }
 
 body {
-  font-size: 200%;
+  font-size: 100%;
 }
   
   * {
@@ -142,7 +142,7 @@ body {
 
   a.qty {
     width: 1.2em;
-    line-height: 1.2em;
+    /*line-height: 1.2em;*/
     border-radius: 2em;
     font-size: 2.4em;
     font-weight: bold;
@@ -158,7 +158,7 @@ body {
   .btn {
     padding: 0.7em 1em;
     border-radius: 0.3em;
-    font-size: 2em;
+    font-size: 1em;
     font-weight: bold;
     color: #fff;
     background: #43ace3;
@@ -198,16 +198,15 @@ body {
     }
     
     .col-pro {
-      width: 70%;
+      min-width: 70%;
     }
     
     .col-qty {
-      width: 22%;
+      min-width: 60px;
     }
     
     img {
       max-width: 100%;
-      margin-bottom: 1em;
     }
   }
   
