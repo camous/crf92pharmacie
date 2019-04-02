@@ -2,7 +2,12 @@
     <head>
             <meta charset="utf-8">
             <link rel="stylesheet" href="style.css"/>
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
             <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+            <script
+			  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+			  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+			  crossorigin="anonymous"></script>
             <script src="jquery.querystring.js"></script>
             <script src="form.js"></script>
             <script src="settings.js"></script>
@@ -11,6 +16,9 @@
     </head>
     <body>
         <div class="cart">
+            <p>
+                <input id="search" type="text" autocomplete="false" placeholder="Recherche">
+            </p>
             <div class="table" >
                 <div class="layout-inline row th">
                     <div class="col col-pro">Articles</div>
@@ -41,17 +49,21 @@
                 otherwise create a new article with quantity 1
             */
             var query = $.querystring(location.search);
-            var barcode = query.k;
-            if(barcode !== undefined){
+            var barcodeQuery = query.k;
+            if(barcodeQuery !== undefined){
+                addArticle(barcodeQuery, "urlParam")
+            }
+            
+            function addArticle(barcode, method) {
                 barcode = barcode.toString();
                 if(allarticles[barcode] !== undefined){
-
                     var article = articles.find(article => article.barcode === barcode);
                     if(article === undefined){
-                        articles.push({
-                            barcode : query.k.toString(),
+                        articles.unshift({
+                            barcode : barcode,
                             display : allarticles[barcode],
-                            quantity : 1
+                            quantity : 1,
+                            addMethod: method
                         });
                     }
 
@@ -200,8 +212,35 @@
 
                 });
             }
+            
+            // Autocomplete search field
+            $( "#search" ).autocomplete({
+                minLength: 2,
+                source: $.map(allarticles, function (value, key) {
+                        return {
+                            label: value,
+                            value: key
+                        }
+                    }),
+                focus: function(event, ui) {
+                    $('#search').val(ui.item.label);
+                    return false;
+                },
+                select: function(event, ui) {
+                    addArticle(ui.item.value, "manualSearch");
+                    drawTable(highlight=ui.item.value);
+                    $('#search').val("");
+                    return false;
+                    /*
+                    $('#search').val(ui.item.label);
+                    $('#link_origin_id').val(ui.item.value);
+                    return false;
+                    */
+                }
+                
+            });
 
             initializeForm();
-            drawTable(highlight=barcode.toString());
+            drawTable();
     </script>
 </html>
