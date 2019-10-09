@@ -24,6 +24,10 @@ body {
     color: #8a8a8a;
   }
   
+  #search_div {
+      width: 100%;
+  }
+  
   input {
     border: solid #bbc3c6;
     border-radius: 0.3em;
@@ -234,8 +238,10 @@ body {
 }
 
 .ui-autocomplete {
-    .ui-menu-item {
-        font-size: 2em;
-        padding: 1em 0;
-    }
+    max-width:100%;
 }
+/*
+.ui-menu-item {
+    font-size: 1.5em;
+    padding: 1em 0;
+}*/

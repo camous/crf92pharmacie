@@ -20,7 +20,7 @@
     </head>
     <body>
         <div class="cart">
-            <p>
+            <p id="search_div">
                 <input id="search" type="text" autocomplete="false" placeholder="Recherche">
             </p>
             <div class="table" >
@@ -34,14 +34,13 @@
                 <input id="email" placeholder="Mon email" oninput="saveEmail();"/><br />
                 <textarea id="comment" placeholder="Commentaire (optionnel)" oninput="saveComment();"></textarea>
             </p>
-        </p>
-        <a href="#" onclick="delayedSend()" class="btn btn-update" id="send">Envoyer</a>
-        <p id="flash">
-            Commande envoyée
-        </p>
+            <a href="#" onclick="delayedSend()" class="btn btn-update" id="send">Envoyer</a>
+            <p id="flash">
+                Commande envoyée
+            </p>
         </div>
-    </body>
-    <script>
+        
+        <script>
 
             var undodeletions = [];
             var sendinprogress = false;
@@ -240,11 +239,14 @@
                     $('#link_origin_id').val(ui.item.value);
                     return false;
                     */
-                }
+                },
+                appendTo: "#search_div"
+                
                 
             });
 
             initializeForm();
             drawTable();
-    </script>
+        </script>
+    </body>
 </html>
