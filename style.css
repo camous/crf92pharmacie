@@ -234,5 +234,8 @@ body {
 }
 
 .ui-autocomplete {
-    font-size: 1.5em
+    .ui-menu-item {
+        font-size: 2em;
+        padding: 1em 0;
+    }
 }
