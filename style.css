@@ -98,7 +98,7 @@ body {
   }
   
   .col {
-    padding: 1em;
+    padding: 0.5em;
     width: 30%;
   }
   
@@ -240,8 +240,7 @@ body {
 .ui-autocomplete {
     max-width:100%;
 }
-/*
+
 .ui-menu-item {
-    font-size: 1.5em;
     padding: 1em 0;
-}*/
+}
