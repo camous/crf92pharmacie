@@ -4,7 +4,7 @@ html {
   }
 
 body {
-  font-size: 200%;
+  font-size: 100%;
 }
   
   * {
@@ -24,9 +24,13 @@ body {
     color: #8a8a8a;
   }
   
+  #search_div {
+      width: 100%;
+  }
+  
   input {
-    border: 0.3em solid #bbc3c6;
-    border-radius: 0.6em;
+    border: solid #bbc3c6;
+    border-radius: 0.3em;
     padding: 0.5em 0.3em; 
     font-size: 1.4em;
     color: #8a8a8a;
@@ -37,7 +41,7 @@ body {
     width: 100%;
   }
   textarea {
-    border-radius: 0.6em;  
+    border-radius: 0.6em;
   }
   
   img {
@@ -64,7 +68,7 @@ body {
   }
   
   .cart {
-    margin: 2.5em;
+    margin: 10px;
     overflow: hidden;
   }
 
@@ -94,7 +98,7 @@ body {
   }
   
   .col {
-    padding: 1em;
+    padding: 0.5em 1em;
     width: 30%;
   }
   
@@ -145,7 +149,7 @@ body {
 
   a.qty {
     width: 1.2em;
-    line-height: 1.2em;
+    /*line-height: 1.2em;*/
     border-radius: 2em;
     font-size: 2.4em;
     font-weight: bold;
@@ -161,7 +165,7 @@ body {
   .btn {
     padding: 0.7em 1em;
     border-radius: 0.3em;
-    font-size: 2em;
+    font-size: 1em;
     font-weight: bold;
     color: #fff;
     background: #43ace3;
@@ -202,16 +206,15 @@ body {
     }
     
     .col-pro {
-      width: 70%;
+      min-width: 70%;
     }
     
     .col-qty {
-      width: 22%;
+      min-width: 60px;
     }
     
     img {
       max-width: 100%;
-      margin-bottom: 1em;
     }
   }
   
@@ -232,4 +235,12 @@ body {
 .highlight {
    -webkit-animation: green-fade 3s ease-in 1;
    animation: green-fade 3s ease-in 1;
+}
+
+.ui-autocomplete {
+    max-width:100%;
+}
+
+.ui-menu-item {
+    padding: 1em 0;
 }
