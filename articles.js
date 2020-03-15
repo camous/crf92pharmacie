@@ -1,4 +1,5 @@
 var allarticles = {
+    '422233' : 'Electrodes ECG (x50)',
     '57300': 'Bocal Serres Pour Ams Lsu 1L',
     '753080': 'Marteau Brise-Vitres & Coupe Ceinture',
     '743434': 'Gants Non Poudres Nitrile T 9/10 Xl',
